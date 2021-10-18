@@ -1,0 +1,23 @@
+{
+  "name": "xstate-wait-for",
+  "version": "1.0.0",
+  "description": "Implementation of Testing Library's waitFor function with XState",
+  "main": "index.js",
+  "scripts": {
+    "test": "jiti ./test/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Devessier/xstate-wait-for.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Devessier/xstate-wait-for/issues"
+  },
+  "homepage": "https://github.com/Devessier/xstate-wait-for#readme",
+  "devDependencies": {
+    "jiti": "^1.12.9"
+  }
+}
