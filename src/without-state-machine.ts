@@ -1,5 +1,5 @@
-function waitForTimeout(timeout: number): [number, Promise<void>] {
-  let timerID: number;
+function waitForTimeout(timeout: number): [NodeJS.Timeout, Promise<void>] {
+  let timerID: NodeJS.Timeout;
 
   const promise = new Promise<void>((resolve) => {
     timerID = setTimeout(() => {
@@ -7,15 +7,15 @@ function waitForTimeout(timeout: number): [number, Promise<void>] {
     }, timeout);
   });
 
-  return [timerID, promise];
+  return [timerID!, promise];
 }
 
 function pollCallback<CallbackReturn>(
   callback: () => CallbackReturn | Promise<CallbackReturn>
-): [number, Promise<CallbackReturn>] {
+): [NodeJS.Timeout, Promise<CallbackReturn>] {
   const INTERVAL_BETWEEN_COMPUTES = 10
 
-  let timerID: number;
+  let timerID: NodeJS.Timeout;
 
   const promise = new Promise<CallbackReturn>((resolve) => {
     timerID = setInterval(async () => {
@@ -29,15 +29,15 @@ function pollCallback<CallbackReturn>(
     }, INTERVAL_BETWEEN_COMPUTES);
   });
 
-  return [timerID, promise];
+  return [timerID!, promise];
 }
 
 export async function waitFor<CallbackReturn>(
   callback: () => CallbackReturn | Promise<CallbackReturn>,
   timeout: number
 ): Promise<CallbackReturn> {
-  let globalTimeoutID: number;
-  let pollIntervalTimerID: number;
+  let globalTimeoutID: NodeJS.Timeout;
+  let pollIntervalTimerID: NodeJS.Timeout;
 
   try {
     const [_globalTimeoutID, globalTimerPromise] = waitForTimeout(timeout);
@@ -56,11 +56,11 @@ export async function waitFor<CallbackReturn>(
       }),
     ]);
 
-    return result;
+    return result!;
   } catch (err) {
     throw new Error("waitFor times out");
   } finally {
-    clearTimeout(globalTimeoutID);
-    clearInterval(pollIntervalTimerID);
+    clearTimeout(globalTimeoutID!);
+    clearInterval(pollIntervalTimerID!);
   }
 }
