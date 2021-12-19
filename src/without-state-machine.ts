@@ -14,7 +14,7 @@ function waitForTimeout(timeout: number): [NodeJS.Timeout, Promise<void>] {
 function pollCallback<CallbackReturn>(
   callback: () => CallbackReturn | Promise<CallbackReturn>
 ): [NodeJS.Timeout, Promise<CallbackReturn>] {
-  const INTERVAL_BETWEEN_COMPUTES = 10
+  const INTERVAL_BETWEEN_COMPUTES = 10;
 
   let timerID: NodeJS.Timeout;
 
@@ -37,32 +37,23 @@ export async function waitFor<CallbackReturn>(
   callback: () => CallbackReturn | Promise<CallbackReturn>,
   timeout: number
 ): Promise<CallbackReturn> {
-  let globalTimeoutID: NodeJS.Timeout;
-  let pollIntervalTimerID: NodeJS.Timeout;
+  const [globalTimeoutID, globalTimerPromise] = waitForTimeout(timeout);
+  const [pollIntervalTimerID, pollPromise] = pollCallback(callback);
 
   try {
-    const [_globalTimeoutID, globalTimerPromise] = waitForTimeout(timeout);
-    const [_pollIntervalTimerID, pollPromise] = pollCallback(callback);
-    globalTimeoutID = _globalTimeoutID;
-    pollIntervalTimerID = _pollIntervalTimerID;
-
-    let result: CallbackReturn;
-
-    await Promise.race([
+    const result = await Promise.race([
       globalTimerPromise.then(() => {
         throw new Error("Timer expired");
       }),
-      pollPromise.then((res) => {
-        result = res;
-      }),
+      pollPromise,
     ]);
 
-    return result!;
+    return result;
   } catch (err) {
     throw new Error("waitFor times out");
   } finally {
-    clearTimeout(globalTimeoutID!);
-    clearInterval(pollIntervalTimerID!);
+    clearTimeout(globalTimeoutID);
+    clearInterval(pollIntervalTimerID);
   }
 }
 // @@@SNIPEND
