@@ -1,3 +1,4 @@
+// @@@SNIPSTART without-state-machine
 function waitForTimeout(timeout: number): [NodeJS.Timeout, Promise<void>] {
   let timerID: NodeJS.Timeout;
 
@@ -64,3 +65,4 @@ export async function waitFor<CallbackReturn>(
     clearInterval(pollIntervalTimerID!);
   }
 }
+// @@@SNIPEND

@@ -1,3 +1,4 @@
+// @@@SNIPSTART with-state-machine
 import {
   assign,
   createMachine,
@@ -123,3 +124,4 @@ export function waitFor<CallbackReturn>(
       .start();
   });
 }
+// @@@SNIPEND
