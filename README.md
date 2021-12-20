@@ -1,2 +1,5 @@
 # xstate-wait-for
-Implementatiobn of a waitFor function similar to Testing Library's one with XState
+
+Implementation of Testing Library's waitFor function with XState.
+
+[Explanatory blog post :link:](https://baptiste.devessier.fr/writing/recreate-testing-library-waitfor-function-with-xstate/)
